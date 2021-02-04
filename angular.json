@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "angulauto",
+  "projects": {
+    "angulauto": {
+      "projectType": "application",
+      "root": "apps/angulauto",
+      "sourceRoot": "apps/angulauto/src",
+      "prefix": "angulauto",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/angulauto",
+            "index": "apps/angulauto/src/index.html",
+            "main": "apps/angulauto/src/main.ts",
+            "polyfills": "apps/angulauto/src/polyfills.ts",
+            "tsConfig": "apps/angulauto/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/angulauto/src/favicon.ico",
+              "apps/angulauto/src/assets"
+            ],
+            "styles": ["apps/angulauto/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/angulauto/src/environments/environment.ts",
+                  "with": "apps/angulauto/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "angulauto:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angulauto:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angulauto:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/angulauto/src/**/*.ts",
+              "apps/angulauto/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/angulauto"],
+          "options": {
+            "jestConfig": "apps/angulauto/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "angulauto-e2e": {
+      "root": "apps/angulauto-e2e",
+      "sourceRoot": "apps/angulauto-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/angulauto-e2e/cypress.json",
+            "tsConfig": "apps/angulauto-e2e/tsconfig.e2e.json",
+            "devServerTarget": "angulauto:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angulauto:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/angulauto-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
